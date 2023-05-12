@@ -119,5 +119,10 @@ form.addEventListener("submit", (event) => {
 		description: formData.get("description"),
 		priority: formData.get("priority"),
 	};
+
+	if (!data.description || !data.priority) {
+		alert("Please try again!");
+	}
+
 	postData(data);
 });

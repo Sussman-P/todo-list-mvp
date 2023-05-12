@@ -15,16 +15,12 @@ const db = new pg.Pool({
 
 app.use(express.static("public"));
 
-
-
 // GET request
 app.get("/api/tasks", (req, res) => {
 	db.query("SELECT * FROM todo").then((data) => {
 		res.json(data.rows);
 	});
 });
-
-
 
 // DELETE Task
 app.delete("/api/tasks/:id", async (req, res) => {
@@ -41,27 +37,27 @@ app.delete("/api/tasks/:id", async (req, res) => {
 });
 
 // POST task
-app.post("/api/tasks", async (req, res) => {
-	try {
-		const { description } = req.body;
-		const priority = Number(req.body.priority);
+app.post("/api/tasks", (req, res) => {
+	const { description } = req.body;
+	const priority = Number(req.body.priority);
 
-		//Validation
-		// if (!description || !priority || Number.isNaN(priority)) {
-		// 	res.sendStatus(422);
-		// 	return;
-		// }
-
-		db.query("INSERT INTO todo (description, priority) VALUES ($1, $2) RETURNING *", [
-			description,
-			priority,
-		]).then((result) => {
-			res.status(201).send(result.rows);
-		});
-	} catch (err) {
-		console.error(err);
-		res.status(500).send("Error deleting todo item");
+	// Validation
+	if (!description || !priority || Number.isNaN(priority)) {
+		res.sendStatus(422);
+		return;
 	}
+
+	/*
+	console.error(err);
+		res.status(500).send("Error deleting todo item");
+	*/
+
+	db.query("INSERT INTO todo (description, priority) VALUES ($1, $2) RETURNING *", [
+		description,
+		priority,
+	]).then((result) => {
+		res.status(201).send(result.rows);
+	});
 });
 
 app.listen(PORT, () => {
