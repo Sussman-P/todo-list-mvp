@@ -12,6 +12,15 @@ h1 {
     justify-content: center;
 }
 
+#description {
+    margin-right: 10px;
+}
+
+#priority {
+    margin-right: 10px;
+}
+
+
 .priority-desc {
     color: red;
     text-decoration: underline;
