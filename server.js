@@ -15,12 +15,16 @@ const db = new pg.Pool({
 
 app.use(express.static("public"));
 
+
+
 // GET request
 app.get("/api/tasks", (req, res) => {
 	db.query("SELECT * FROM todo").then((data) => {
 		res.json(data.rows);
 	});
 });
+
+
 
 // DELETE Task
 app.delete("/api/tasks/:id", async (req, res) => {
