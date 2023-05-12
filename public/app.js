@@ -49,7 +49,7 @@ fetch("/api/tasks")
 			taskContainer.appendChild(taskDiv);
 		}
 	});
-	
+
 // Fetching the POST REQUEST
 function postData(data) {
 	fetch("/api/tasks", {
