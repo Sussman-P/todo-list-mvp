@@ -45,3 +45,12 @@ h1 {
     display: flex;
     align-items: center;
 }
+
+.task-list {
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 10px 5px 5px rgb(95,
+        142,
+        148),
+        -1em 0 .4em rgb(95, 142, 148);
+}
