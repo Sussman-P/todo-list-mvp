@@ -16,10 +16,14 @@ const db = new pg.Pool({
 app.use(express.static("public"));
 
 // GET request
-app.get("/api/tasks", (req, res) => {
-	db.query("SELECT * FROM todo").then((data) => {
+app.get("/api/tasks", async (req, res) => {
+	try {
+		const data = await db.query("SELECT * FROM todo");
 		res.json(data.rows);
-	});
+	} catch (err) {
+		console.error(err);
+		res.status(404).send("Error finding task database");
+	}
 });
 
 // DELETE Task
@@ -27,9 +31,8 @@ app.delete("/api/tasks/:id", async (req, res) => {
 	try {
 		const id = req.params.id;
 
-		await db.query("DELETE FROM todo WHERE id = $1", [id]).then(() => {
-			res.send(`Deleted todo item with ID ${id}`);
-		});
+		await db.query("DELETE FROM todo WHERE id = $1", [id]);
+		res.send(`Deleted todo item with ID ${id}`);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send("Error deleting todo item");
@@ -37,27 +40,26 @@ app.delete("/api/tasks/:id", async (req, res) => {
 });
 
 // POST task
-app.post("/api/tasks", (req, res) => {
-	const { description } = req.body;
-	const priority = Number(req.body.priority);
+app.post("/api/tasks", async (req, res) => {
+	try {
+		const { description } = req.body;
+		const priority = Number(req.body.priority);
 
-	// Validation
-	if (!description || !priority || Number.isNaN(priority)) {
-		res.sendStatus(422);
-		return;
-	}
+		// Validation
+		if (!description || !priority || Number.isNaN(priority)) {
+			res.sendStatus(422);
+			return;
+		}
 
-	/*
-	console.error(err);
-		res.status(500).send("Error deleting todo item");
-	*/
-
-	db.query("INSERT INTO todo (description, priority) VALUES ($1, $2) RETURNING *", [
-		description,
-		priority,
-	]).then((result) => {
+		const result = await db.query(
+			"INSERT INTO todo (description, priority) VALUES ($1, $2) RETURNING *",
+			[description, priority]
+		);
 		res.status(201).send(result.rows);
-	});
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Error deleting todo item");
+	}
 });
 
 app.listen(PORT, () => {

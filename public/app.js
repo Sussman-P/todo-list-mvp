@@ -10,17 +10,14 @@ fetch("/api/tasks")
 			// Tasks Div
 			const taskDiv = document.createElement("div");
 			taskDiv.className = "task-items";
-			const h2 = document.createElement("h2");
-			h2.textContent = task.description;
-			taskDiv.append(h2);
 
-			// If priority is greater than 2, send a message
-			if (task.priority > 2) {
-				const priorityDesc = document.createElement("div");
-				priorityDesc.className = "priority-desc";
-				priorityDesc.textContent = "(This is a high priority task!)";
-				taskDiv.append(priorityDesc);
-			}
+			//creating an H2 title for tasks
+			const h2 = document.createElement("h2");
+			h2.className = "task-name";
+			h2.textContent = task.description;
+
+			//appending H2 to task DIV
+			taskDiv.append(h2);
 
 			// Priority info
 			const priorityNum = document.createElement("div");
@@ -69,15 +66,8 @@ function postData(data) {
 			taskDiv.className = "task-items";
 			const h2 = document.createElement("h2");
 			h2.textContent = data[0].description;
+			h2.className = "task-name";
 			taskDiv.append(h2);
-
-			// If priority is greater than 2, send a message
-			if (data[0].priority > 2) {
-				const priorityDesc = document.createElement("div");
-				priorityDesc.className = "priority-desc";
-				priorityDesc.textContent = "(This is a high priority task!)";
-				taskDiv.append(priorityDesc);
-			}
 
 			// Priority info
 			const priorityNum = document.createElement("div");
@@ -125,4 +115,5 @@ form.addEventListener("submit", (event) => {
 	}
 
 	postData(data);
+	form.reset();
 });
