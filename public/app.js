@@ -2,7 +2,28 @@ const taskContainer = document.querySelector(".tasks");
 const taskInput = document.getElementById("description");
 const taskPriority = document.getElementById("priority");
 
-// Fetching the GET REQUEST
+taskInput.focus();
+
+// Task creation form
+const form = document.getElementById("myForm");
+form.addEventListener("submit", (event) => {
+	event.preventDefault();
+	const formData = new FormData(form);
+
+	const data = {
+		description: formData.get("description"),
+		priority: formData.get("priority"),
+	};
+
+	if (!data.description || !data.priority) {
+		alert("Please try again!");
+	}
+
+	postData(data);
+	form.reset();
+});
+
+// GET REQUEST
 fetch("/api/tasks")
 	.then((res) => res.json())
 	.then((tasks) => {
@@ -15,6 +36,42 @@ fetch("/api/tasks")
 			const h2 = document.createElement("h2");
 			h2.className = "task-name";
 			h2.textContent = task.description;
+
+			h2.addEventListener("click", () => {
+				const input = document.createElement("input");
+				input.setAttribute("type", "text");
+				input.setAttribute("value", h2.innerText);
+
+				input.addEventListener("blur", () => {
+					const newVal = input.value;
+					const taskID = task.id;
+
+					if (newVal === h2.innerHTML) {
+						console.log("nothing changed!");
+						input.replaceWith(h2);
+						return;
+					}
+
+					fetch(`/api/tasks/${taskID}`, {
+						method: "PATCH",
+						body: JSON.stringify({ description: newVal }),
+						headers: {
+							"Content-Type": "application/json",
+						},
+					})
+						.then((res) => res.json())
+						.then((data) => {
+							console.log(data);
+							h2.innerText = data.description;
+							input.replaceWith(h2);
+						})
+						.catch((error) => {
+							console.error("Error updating text:", error);
+						});
+				});
+				h2.replaceWith(input);
+				input.focus();
+			});
 
 			//appending H2 to task DIV
 			taskDiv.append(h2);
@@ -42,12 +99,12 @@ fetch("/api/tasks")
 			// adds the delete btn to task div
 			taskDiv.append(deleteBtn);
 
-			// add the task item div to task container.
+			// add the tasks to task container.
 			taskContainer.appendChild(taskDiv);
 		}
 	});
 
-// Fetching the POST REQUEST
+// POST REQUEST
 function postData(data) {
 	fetch("/api/tasks", {
 		method: "POST",
@@ -98,22 +155,3 @@ function postData(data) {
 			console.error("Error:", error);
 		});
 }
-
-const form = document.getElementById("myForm");
-
-form.addEventListener("submit", (event) => {
-	event.preventDefault();
-	const formData = new FormData(form);
-
-	const data = {
-		description: formData.get("description"),
-		priority: formData.get("priority"),
-	};
-
-	if (!data.description || !data.priority) {
-		alert("Please try again!");
-	}
-
-	postData(data);
-	form.reset();
-});
