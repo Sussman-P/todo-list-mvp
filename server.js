@@ -62,6 +62,23 @@ app.post("/api/tasks", async (req, res) => {
 	}
 });
 
+app.patch("/api/tasks/:id", async (req, res) => {
+	try {
+		const { id } = req.params;
+		const { description } = req.body;
+
+		const data = await db.query("UPDATE todo SET description = $1 WHERE id = $2 RETURNING *", [
+			description,
+			id,
+		]);
+		const updatedTask = data.rows[0];
+		res.send(updatedTask);
+	} catch (err) {
+		console.error(err);
+		res.status(500).send("Error updating task");
+	}
+});
+
 app.listen(PORT, () => {
 	console.log(`Listening on Port: ${PORT}`);
 });
