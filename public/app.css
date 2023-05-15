@@ -1,10 +1,42 @@
 body {
+    font-family: "Kanit", sans-serif;
     /* background-color: rgb(243, 214, 214); */
-    background: rgb(167, 163, 245);
     background: linear-gradient(90deg, rgba(167, 163, 245, 1) 0%, rgba(208, 143, 85, 1) 35%, rgba(0, 212, 255, 1) 100%);
+    background-size: 600% 600%;
+    -webkit-animation: AnimationName 30s ease infinite;
+    animation: AnimationName 30s ease infinite;
 }
 
-h1 {
+@-webkit-keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@keyframes AnimationName {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+.font-effect-neon {
+    text-shadow: 0 0 0.3em #26da47, 0 0 0.1em #fff;
     text-align: center;
 }
 
@@ -50,12 +82,12 @@ h1 {
 
 .task-items {
     border: 1px solid black;
+    border-radius: 50px;
     display: grid;
     flex-wrap: wrap;
     justify-content: center;
     justify-items: center;
-    width: 500px;
-    height: auto;
+    width: 600%;
 }
 
 .priority-num {
@@ -81,7 +113,7 @@ h1 {
 
 .task-list {
     text-align: center;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgb(0, 0, 0);
 }
