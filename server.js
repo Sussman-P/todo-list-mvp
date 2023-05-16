@@ -18,7 +18,7 @@ app.use(express.static("public"));
 // GET request
 app.get("/api/tasks", async (req, res) => {
 	try {
-		const data = await db.query("SELECT * FROM todo");
+		const data = await db.query("SELECT * FROM todo ORDER BY created_at");
 		res.json(data.rows);
 	} catch (err) {
 		console.error(err);
@@ -52,10 +52,10 @@ app.post("/api/tasks", async (req, res) => {
 		}
 
 		const result = await db.query(
-			"INSERT INTO todo (description, priority) VALUES ($1, $2) RETURNING *",
-			[description, priority]
+			"INSERT INTO todo (description, priority, created_at) VALUES ($1, $2, $3) RETURNING *",
+			[description, priority, new Date()]
 		);
-		res.status(201).send(result.rows);
+		res.status(201).send(result.rows[0]);
 	} catch (err) {
 		console.error(err);
 		res.status(500).send("Error deleting todo item");
@@ -65,12 +65,12 @@ app.post("/api/tasks", async (req, res) => {
 app.patch("/api/tasks/:id", async (req, res) => {
 	try {
 		const { id } = req.params;
-		const { description } = req.body;
+		const { description, priority } = req.body;
 
-		const data = await db.query("UPDATE todo SET description = $1 WHERE id = $2 RETURNING *", [
-			description,
-			id,
-		]);
+		const data = await db.query(
+			"UPDATE todo SET description = COALESCE($1, description), priority = COALESCE($2, priority) WHERE id = $3 RETURNING *",
+			[description, priority, id]
+		);
 		const updatedTask = data.rows[0];
 		res.send(updatedTask);
 	} catch (err) {
