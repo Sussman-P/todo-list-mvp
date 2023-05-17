@@ -7,4 +7,4 @@ change to desired setting.
 
 NOW DEPLOYED: https://todo-list-mvp.onrender.com
 
-### Thank you for useing my To-Do List!
+### Thank you for using my To-Do List!
