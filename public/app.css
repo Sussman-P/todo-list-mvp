@@ -1,10 +1,10 @@
 body {
     font-family: "Kanit", sans-serif;
     /* background-color: rgb(243, 214, 214); */
-    background: linear-gradient(90deg, rgba(167, 163, 245, 1) 0%, rgba(208, 143, 85, 1) 35%, rgb(48, 222, 132) 50%, rgb(251, 62, 62) 50%);
+    background: linear-gradient(90deg, rgba(167, 163, 245, 1) 0%, rgba(208, 143, 85, 1) 35%, rgb(48, 222, 132, 1) 100%, rgb(251, 62, 62, 1) 100%);
     background-size: 600% 600%;
-    -webkit-animation: AnimationName 30s ease infinite;
-    animation: AnimationName 30s ease infinite;
+    -webkit-animation: AnimationName 15s ease infinite;
+    animation: AnimationName 15s ease infinite;
 }
 
 @-webkit-keyframes AnimationName {
